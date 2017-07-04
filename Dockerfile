@@ -50,5 +50,6 @@ ENV CONSUL_TOKEN=
 
 ENV SYNC_SERVICE=
 ENV SYNC_IGNORE_DELETE=
+ENV SYNC_IP=
 
 CMD ["/usr/local/bin/start.sh"]
