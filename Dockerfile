@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM debian:9
 
 ENV CONSUL_TEMPLATE_VERSION=0.18.5
 ENV CONSUL_TEMPLATE_SHA256=b0cd6e821d6150c9a0166681072c12e906ed549ef4588f73ed58c9d834295cd2
@@ -9,12 +9,15 @@ ENV SYNCTHING_INOTIFY_SHA256=2d433132e6792780248494eea509cc9b34a9af127a1a8a3120b
 USER root
 
 RUN \
-  apk add --no-cache --virtual .build-deps \
+  apt-get update \
+
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+    ca-certificates \
     curl \
     unzip \
 
-  && apk add --no-cache \
-    su-exec \
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+    gosu \
 
   && cd /usr/local/bin \
   && curl -L https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip -o consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip \
@@ -28,7 +31,12 @@ RUN \
   && tar -xvzf "syncthing-inotify-linux-amd64-v${SYNCTHING_INOTIFY_VERSION}.tar.gz" syncthing-inotify \
   && rm "syncthing-inotify-linux-amd64-v${SYNCTHING_INOTIFY_VERSION}.tar.gz" \
 
-  && apk del .build-deps
+  && apt-get purge -y --auto-remove \
+    ca-certificates \
+    curl \
+    unzip \
+
+  && rm -rf /var/lib/apt/lists/*
 
 COPY start.sh /usr/local/bin/start.sh
 COPY syncthing.hcl /etc/syncthing.hcl
