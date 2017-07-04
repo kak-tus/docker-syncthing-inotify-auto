@@ -1,0 +1,1 @@
+# docker-syncthing-inotify-auto
