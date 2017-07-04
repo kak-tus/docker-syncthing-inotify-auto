@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+/usr/local/bin/syncthing-inotify -target="http://{{ env "SYNC_IP" }}:8384"
+child=$!
+
+trap "kill $child" TERM INT
+wait "$child"

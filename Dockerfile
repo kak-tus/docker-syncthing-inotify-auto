@@ -38,9 +38,10 @@ RUN \
 
   && rm -rf /var/lib/apt/lists/*
 
-COPY start.sh /usr/local/bin/start.sh
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY syncthing.hcl /etc/syncthing.hcl
 COPY config.xml.template /home/user/config.xml.template
+COPY start.sh.template /home/user/start.sh.template
 
 ENV USER_UID=1000
 ENV USER_GID=1000
@@ -52,4 +53,4 @@ ENV SYNC_SERVICE=
 ENV SYNC_IGNORE_DELETE=
 ENV SYNC_IP=
 
-CMD ["/usr/local/bin/start.sh"]
+CMD ["/usr/local/bin/entrypoint.sh"]
